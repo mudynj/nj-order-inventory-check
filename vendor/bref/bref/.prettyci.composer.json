@@ -1,0 +1,5 @@
+{
+    "require": {
+        "doctrine/coding-standard": "^8.0"
+    }
+}
