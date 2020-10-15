@@ -14,20 +14,16 @@ return function ($event){
     $items = $order->orderItems;
     $item_inventory_match = true;
 
-    $format = "Y-m-d\TH:i:s.v\T";
+    $format = "Y-m-d\TH:i:s.uP";
 
     foreach($items as $item){
        
         $sku_idx = array_search($item->id,array_column($inventory,'id') );
         $sku = $inventory[$sku_idx];
-        echo 'availability date'.$sku->availableFromDate;
-        echo 'shipping date'.$order ->shippingDate;
+
         $availability_date = date_create_from_format($format,$sku->availableFromDate);
         $shipping_date = date_create_from_format($format,$order ->shippingDate);
-        
-        echo 'availability date'.$availability_date;
-        echo 'shipping date'.$shipping_date;
-
+ 
         if(($sku->quantity < $item->quantity) || date_diff($shipping_date,$availability_date) < 0){
             $item_inventory_match = false;
         }
