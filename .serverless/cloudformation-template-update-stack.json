@@ -1,0 +1,300 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "The AWS CloudFormation template for this Serverless application",
+  "Resources": {
+    "ServerlessDeploymentBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "ServerlessDeploymentBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {
+          "Ref": "ServerlessDeploymentBucket"
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":s3:::",
+                      {
+                        "Ref": "ServerlessDeploymentBucket"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "GetOrderLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/app-dev-getOrder"
+      }
+    },
+    "UpdateOrderLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/app-dev-updateOrder"
+      }
+    },
+    "GetInventoryLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/app-dev-getInventory"
+      }
+    },
+    "IamRoleLambdaExecution": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": {
+              "Fn::Join": [
+                "-",
+                [
+                  "app",
+                  "dev",
+                  "lambda"
+                ]
+              ]
+            },
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogStream",
+                    "logs:CreateLogGroup"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-dev*:*"
+                    }
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/app-dev*:*:*"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "Path": "/",
+        "RoleName": {
+          "Fn::Join": [
+            "-",
+            [
+              "app",
+              "dev",
+              {
+                "Ref": "AWS::Region"
+              },
+              "lambdaRole"
+            ]
+          ]
+        }
+      }
+    },
+    "GetOrderLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/app/dev/1602730924576-2020-10-15T03:02:04.576Z/app.zip"
+        },
+        "FunctionName": "app-dev-getOrder",
+        "Handler": "new_order.php",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "provided",
+        "Timeout": 6,
+        "Description": "Fetches orders from order API",
+        "Layers": [
+          "arn:aws:lambda:us-east-1:209497400698:layer:php-74:14"
+        ]
+      },
+      "DependsOn": [
+        "GetOrderLogGroup"
+      ]
+    },
+    "GetOrderLambdaVersion7a90MUT5B84au585Q6uDivcxFJ60eNw4HoEjKtw": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetOrderLambdaFunction"
+        },
+        "CodeSha256": "aD4Klck/jD0pFPSI5t8rKiYe5WJR0pNMSIoVI4c+nMg=",
+        "Description": "Fetches orders from order API"
+      }
+    },
+    "UpdateOrderLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/app/dev/1602730924576-2020-10-15T03:02:04.576Z/app.zip"
+        },
+        "FunctionName": "app-dev-updateOrder",
+        "Handler": "update_order.php",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "provided",
+        "Timeout": 6,
+        "Description": "updates orders on order API",
+        "Layers": [
+          "arn:aws:lambda:us-east-1:209497400698:layer:php-74:14"
+        ]
+      },
+      "DependsOn": [
+        "UpdateOrderLogGroup"
+      ]
+    },
+    "UpdateOrderLambdaVersionF2BN13vaeSIoJhCa5go3H4l7J8UL5j8oYuEpdiFs": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "UpdateOrderLambdaFunction"
+        },
+        "CodeSha256": "aD4Klck/jD0pFPSI5t8rKiYe5WJR0pNMSIoVI4c+nMg=",
+        "Description": "updates orders on order API"
+      }
+    },
+    "GetInventoryLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/app/dev/1602730924576-2020-10-15T03:02:04.576Z/app.zip"
+        },
+        "FunctionName": "app-dev-getInventory",
+        "Handler": "inventory.php",
+        "MemorySize": 1024,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "provided",
+        "Timeout": 6,
+        "Description": "Fetches Inventory from Inventory API",
+        "Layers": [
+          "arn:aws:lambda:us-east-1:209497400698:layer:php-74:14"
+        ]
+      },
+      "DependsOn": [
+        "GetInventoryLogGroup"
+      ]
+    },
+    "GetInventoryLambdaVersionZTuR6DrODCWYhzonfWlgoIKaWwBHK88yeOzsthMrDss": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetInventoryLambdaFunction"
+        },
+        "CodeSha256": "aD4Klck/jD0pFPSI5t8rKiYe5WJR0pNMSIoVI4c+nMg=",
+        "Description": "Fetches Inventory from Inventory API"
+      }
+    }
+  },
+  "Outputs": {
+    "ServerlessDeploymentBucketName": {
+      "Value": {
+        "Ref": "ServerlessDeploymentBucket"
+      }
+    },
+    "GetOrderLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetOrderLambdaVersion7a90MUT5B84au585Q6uDivcxFJ60eNw4HoEjKtw"
+      }
+    },
+    "UpdateOrderLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "UpdateOrderLambdaVersionF2BN13vaeSIoJhCa5go3H4l7J8UL5j8oYuEpdiFs"
+      }
+    },
+    "GetInventoryLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetInventoryLambdaVersionZTuR6DrODCWYhzonfWlgoIKaWwBHK88yeOzsthMrDss"
+      }
+    }
+  }
+}
