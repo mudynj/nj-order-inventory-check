@@ -10,7 +10,6 @@ require __DIR__ . '/vendor/autoload.php';
 return function ($event){
 
     $client = new Client([
-        // You can set any number of default request options.
         'timeout'  => 2.0
     ]);
 
@@ -22,6 +21,10 @@ return function ($event){
         return $order["status"] == "new";
     });
     
+    if (count($new_orders) == 0){
+        return "No Orders";
+    };
+
     return $new_orders;
 };
 

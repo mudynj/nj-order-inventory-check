@@ -18,7 +18,6 @@ return function ($event){
     $final_uri = $base_uri . $order["id"];
 
     $client = new Client([
-        // You can set any number of default request options.
         'timeout'  => 2.0,
     ]);
     

@@ -30,6 +30,11 @@ functions:
         description: 'Fetches Inventory from Inventory API'
         layers:
             - ${bref:layer.php-74}
+    matchItemWithInventory:
+        handler: match_Item_Inventory.php
+        description: 'Fetches Inventory from Inventory API'
+        layers:
+            - ${bref:layer.php-74}
 
 
 stepFunctions:
