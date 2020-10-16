@@ -7,9 +7,10 @@ require __DIR__ . '/vendor/autoload.php';
 
 return function ($event){
     
-    $order = json_decode($event->order);
 
-    $inventory = json_decode($event->inventory);
+    $order = $event["order"];
+
+    $inventory = $event["inventory"];
 
     $items = $order->orderItems;
     $item_inventory_match = true;
@@ -31,8 +32,10 @@ return function ($event){
     }
 
     if($item_inventory_match = true){
-        $order -> status = "processed";
+        $order->status = "processed";
+        return $order;
     }
-    return $order;
+    
+    return "cannot Fill order";
 };
 

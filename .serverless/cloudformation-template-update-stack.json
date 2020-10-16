@@ -164,7 +164,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/app/dev/1602810339180-2020-10-16T01:05:39.180Z/app.zip"
+          "S3Key": "serverless/app/dev/1602810749890-2020-10-16T01:12:29.890Z/app.zip"
         },
         "FunctionName": "app-dev-getOrder",
         "Handler": "new_order.php",
@@ -186,14 +186,14 @@
         "GetOrderLogGroup"
       ]
     },
-    "GetOrderLambdaVersionx8k7sbGT6olVzo5GufRSdBFqw5egSzzV1EugmQDF5iU": {
+    "GetOrderLambdaVersionOXlfzOuxG9LmKYy7Dk4PWmxAEhSS8bO46BDlMafkuI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetOrderLambdaFunction"
         },
-        "CodeSha256": "5R/5WRs0iyjMDRy0O7uy5sRxj62L48880rf3ach1BGI=",
+        "CodeSha256": "zfZeZVQ9q0aghLxWG6dw88c1KNt/o2xfKBBcHnryfkA=",
         "Description": "Fetches orders from order API"
       }
     },
@@ -204,7 +204,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/app/dev/1602810339180-2020-10-16T01:05:39.180Z/app.zip"
+          "S3Key": "serverless/app/dev/1602810749890-2020-10-16T01:12:29.890Z/app.zip"
         },
         "FunctionName": "app-dev-updateOrder",
         "Handler": "update_order.php",
@@ -226,14 +226,14 @@
         "UpdateOrderLogGroup"
       ]
     },
-    "UpdateOrderLambdaVersionIfep0tqzHFJUF2xjbXSyexAyfegq5Cilm9zvTl3lJw": {
+    "UpdateOrderLambdaVersionDtcyGDPR8L7ko3LubzX3AhvFzFgdLJzATLr3HOD1n2g": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "UpdateOrderLambdaFunction"
         },
-        "CodeSha256": "5R/5WRs0iyjMDRy0O7uy5sRxj62L48880rf3ach1BGI=",
+        "CodeSha256": "zfZeZVQ9q0aghLxWG6dw88c1KNt/o2xfKBBcHnryfkA=",
         "Description": "updates orders on order API"
       }
     },
@@ -244,7 +244,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/app/dev/1602810339180-2020-10-16T01:05:39.180Z/app.zip"
+          "S3Key": "serverless/app/dev/1602810749890-2020-10-16T01:12:29.890Z/app.zip"
         },
         "FunctionName": "app-dev-getInventory",
         "Handler": "inventory.php",
@@ -266,14 +266,14 @@
         "GetInventoryLogGroup"
       ]
     },
-    "GetInventoryLambdaVersionJOO5yaAavEVuQjvq8PJCanpKSKZq1OtGCh47TBbik": {
+    "GetInventoryLambdaVersionXIRzahv5XmxORycCEc0MfHClheRF9hTvn5LSNuJ0Ng": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetInventoryLambdaFunction"
         },
-        "CodeSha256": "5R/5WRs0iyjMDRy0O7uy5sRxj62L48880rf3ach1BGI=",
+        "CodeSha256": "zfZeZVQ9q0aghLxWG6dw88c1KNt/o2xfKBBcHnryfkA=",
         "Description": "Fetches Inventory from Inventory API"
       }
     },
@@ -284,7 +284,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/app/dev/1602810339180-2020-10-16T01:05:39.180Z/app.zip"
+          "S3Key": "serverless/app/dev/1602810749890-2020-10-16T01:12:29.890Z/app.zip"
         },
         "FunctionName": "app-dev-matchItemWithInventory",
         "Handler": "match_Item_Inventory.php",
@@ -306,14 +306,14 @@
         "MatchItemWithInventoryLogGroup"
       ]
     },
-    "MatchItemWithInventoryLambdaVersionVwN6nIJZB3EY9UM16SZmHEQOv5L7LU8gS4CFl24z8qo": {
+    "MatchItemWithInventoryLambdaVersionJeUeK9C1pQa1kjJmyioM2BYeLBy72cqbZAhTGGYrU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "MatchItemWithInventoryLambdaFunction"
         },
-        "CodeSha256": "5R/5WRs0iyjMDRy0O7uy5sRxj62L48880rf3ach1BGI=",
+        "CodeSha256": "zfZeZVQ9q0aghLxWG6dw88c1KNt/o2xfKBBcHnryfkA=",
         "Description": "Fetches Inventory from Inventory API"
       }
     }
@@ -327,25 +327,25 @@
     "GetOrderLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetOrderLambdaVersionx8k7sbGT6olVzo5GufRSdBFqw5egSzzV1EugmQDF5iU"
+        "Ref": "GetOrderLambdaVersionOXlfzOuxG9LmKYy7Dk4PWmxAEhSS8bO46BDlMafkuI"
       }
     },
     "UpdateOrderLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "UpdateOrderLambdaVersionIfep0tqzHFJUF2xjbXSyexAyfegq5Cilm9zvTl3lJw"
+        "Ref": "UpdateOrderLambdaVersionDtcyGDPR8L7ko3LubzX3AhvFzFgdLJzATLr3HOD1n2g"
       }
     },
     "GetInventoryLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetInventoryLambdaVersionJOO5yaAavEVuQjvq8PJCanpKSKZq1OtGCh47TBbik"
+        "Ref": "GetInventoryLambdaVersionXIRzahv5XmxORycCEc0MfHClheRF9hTvn5LSNuJ0Ng"
       }
     },
     "MatchItemWithInventoryLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MatchItemWithInventoryLambdaVersionVwN6nIJZB3EY9UM16SZmHEQOv5L7LU8gS4CFl24z8qo"
+        "Ref": "MatchItemWithInventoryLambdaVersionJeUeK9C1pQa1kjJmyioM2BYeLBy72cqbZAhTGGYrU"
       }
     }
   }
