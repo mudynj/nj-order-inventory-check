@@ -13,6 +13,10 @@ Bref + Serverless installation https://bref.sh/docs/installation.html
 Composer Installation - https://getcomposer.org/download/
 Guzzle Client - `php composer.phar require guzzle/guzzle:~3.9`
 
+Monitoring
+---
+The application was monitored using Cloudwatch, logs were sent to Cloudwatch for analysis.
+
 AWS StepFunctions
 ---
 StepFunctions are used to orchestrate the sequence of execution of the Lambda functions. Each Lambda function changes state and passes on to the next state.
