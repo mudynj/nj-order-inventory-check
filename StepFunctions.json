@@ -1,0 +1,98 @@
+{
+    "Comment": "An ERP with Step Functions and PHP Lambdas",
+    "StartAt": "Pass",
+    "States": {
+      "Pass": {
+        "Comment": "Initiate processing.",
+        "Type": "Pass",
+        "Next": "Fetch Orders"
+      },
+      "Fetch Orders": {
+        "Comment": "Fetch orders from the orders API",
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "Parameters": {
+          "FunctionName": "arn:aws:lambda:us-east-1:421925048220:function:app-dev-getOrder:$LATEST"
+        },
+        "ResultPath": "$.orders",
+        "Next": "Are there orders to process?"
+      },
+      "Are there orders to process?": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$",
+            "StringEquals": "No Orders",
+            "Next": "Finish"
+          }
+        ],
+        "Default": "Fetch Inventory"
+      },
+      "Fetch Inventory": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "Parameters": {
+          "FunctionName": "arn:aws:lambda:us-east-1:421925048220:function:app-dev-getInventory:$LATEST"
+        },
+        "ResultPath": "$.inventory",
+        "Next": "Process Orders"
+      },
+      "Process Orders": {
+        "Type": "Map",
+        "ItemsPath": "$.orders.Payload",
+        "Parameters": {
+          "order.$": "$$.Map.Item.Value",
+          "inventory.$": "$.inventory.Payload"
+        },
+        "MaxConcurrency": 2,
+        "Iterator": {
+          "StartAt": "is Order Valid?",
+          "States": {
+            "is Order Valid?": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "Parameters": {
+                "FunctionName": "arn:aws:lambda:us-east-1:421925048220:function:app-dev-updateOrder:$LATEST"
+              },
+              "Comment": "Update orders when we find one.",
+              "Next": "Update Order"
+            },
+            "Update Order": {
+              "Comment": "Update orders when we find one.",
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "Parameters": {
+                "FunctionName": "arn:aws:lambda:us-east-1:421925048220:function:app-dev-updateOrder:$LATEST"
+              },
+              "End": true
+            }
+          }
+        },
+        "Next": "Finish",
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Error"
+            ],
+            "IntervalSeconds": 1,
+            "BackoffRate": 2,
+            "MaxAttempts": 2
+          }
+        ],
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "Error"
+          }
+        ]
+      },
+      "Finish": {
+        "Type": "Succeed"
+      },
+      "Error": {
+        "Type": "Fail"
+      }
+    }
+  }
